@@ -42,23 +42,18 @@ class PingUsersSimulation extends Simulation {
           session}}
 
   object BusinessLogic {
-    var headers_10 = Map("Content-Type" -> "application/json; charset=ISO-8859-1",
-                          "Authorization" -> "Bearer ${access}")
-    exec { session =>
-      println(session("access").as[String])
-      session
-    }
+    var headers_10 = Map("Content-Type" -> "application/json; charset=ISO-8859-1")
+
     val getPing =
-      exec(session => session.set("access", token))
-      .exec(http("GetPing")
-        .get("/v1/service/microservicio/ping")
+      exec(http("GetPing")
+        .get("/microservicio/ping")
         .headers(headers_10)
         .check(status.is(200))
       )
     val getUsers =
       exec(session => session.set("access", token))
       .exec(http("GetUsers")
-        .get("/stress/users")
+        .get("/microservicio/users")
         .headers(headers_10)
         .check(status.is(200))
       )
@@ -67,11 +62,10 @@ class PingUsersSimulation extends Simulation {
   val scn = scenario("GetPing")
     .exec(
       BusinessLogic.getPing,
-      //BusinessLogic.getUsers
+      BusinessLogic.getUsers
     )
 
   setUp(
-    auth.inject(constantUsersPerSec(1) during (1 seconds)),
     scn.inject(
       nothingFor(2 seconds),
       atOnceUsers(5),

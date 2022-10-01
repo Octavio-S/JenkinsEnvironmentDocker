@@ -20,7 +20,7 @@ pipeline {
         stage('Analize') {
             steps {
                 dir("Curso-Microservicios/"){
-                    withSonarQubeEnv('SonarServer'){
+                    withSonarQubeEnv('sonarqube_server'){
                         sh "mvn clean package sonar:sonar \
                             -Dsonar.projectKey=21_MyCompany_Microservice \
                             -Dsonar.projectName=21_MyCompany_Microservice \

@@ -65,7 +65,7 @@ pipeline {
                 withCredentials([[$class: 'UsernamePasswordMultiBinding', credentialsId: 'docker_nexus', usernameVariable: 'USERNAME', passwordVariable: 'PASSWORD']]) {
                     sh "docker login -u $USERNAME -p $PASSWORD 192.168.1.65:8083"
                     sh "docker stop microservicio || true"
-                    sh "docker run -rm -p 8090:8090 --name microservicio -d -e SPRING_PROFILES_ACTIVE=dev 192.168.1.65:8083/repository/docker-private/microservicio:latest"
+                    sh "docker run --rm -p 8090:8090 --name microservicio -d -e SPRING_PROFILES_ACTIVE=dev 192.168.1.65:8083/repository/docker-private/microservicio:latest"
                 }
             }
         }

@@ -67,9 +67,16 @@ pipeline {
                     sh "docker stop microservicio || true"
                     sh "docker run -rm -p 8090:8090 --name microservicio -d -e SPRING_PROFILES_ACTIVE=dev 192.168.1.65:8083/repository/docker-private/microservicio:latest"
                 }
-                
             }
         }
 
+        stage('stress test') {
+            steps {
+                sleep 5
+                dir('GatlingTest') {
+                    sh "mvn gatling:test -Dgatling.simulationClass=microservice.PingUsersSimulation"
+                }
+            }
+        }
     }
 }
